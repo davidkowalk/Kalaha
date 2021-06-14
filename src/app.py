@@ -1,4 +1,6 @@
 from Board import Board
+from sys import argv
+import binascii
 
 def print_layout():
     print("╔══╦══╦══╦══╦══╦══╦══╦══╗")
@@ -45,6 +47,9 @@ def get_index(board):
         i = input(f"Player {board.current_player+1}:")
 
         if i == "exit":
+            # Print board representation
+            print(f"Continue with code \"{binascii.hexlify(bytearray(board.state)).decode()}\"")
+            print("> python3 ./app.py <code>")
             exit()
         elif 0 < int(i) < 7:
             return int(i)+board.current_player*7
@@ -52,16 +57,7 @@ def get_index(board):
             #print("Please select number from 1 to 6 or exit via \"exit\"\r\033[A\033[A")
             print("Please select number from 1 to 6 or exit via \"exit\"")
 
-def main():
-    #import colorama
-
-    #colorama.init()
-
-    print("Layout")
-    print_layout()
-    print("\nGAME")
-
-    b = Board()
+def game_loop(b):
     while not b.ended:
         render(b.state)
         i = get_index(b)
@@ -82,15 +78,30 @@ def main():
         elif code == 6:
             print("Game Ended\n\n")
             winner = b.finalize()
-
             print(f"Player {winner+1} won!")
             render(b.state)
             break
         else:
             print(" "*90, end="")
-
-        print(" "*30)
+            print(" "*30)
         #print("\r\033[A\033[A\033[A\033[A\033[A\033[A\033[A\033[A\033[A\033[A") #Return to start
+
+def main():
+    #import colorama
+
+    #colorama.init()
+
+    if len(argv)>1:
+        state = list(binascii.unhexlify(argv[1].encode("utf-8")))
+        b = Board(state)
+    else:
+        b = Board()
+
+    print("Layout")
+    print_layout()
+    print("\nGAME")
+
+    game_loop(b)
 
 
 
