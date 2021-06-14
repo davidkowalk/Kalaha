@@ -11,3 +11,18 @@ May either type "A" or Decimal "10". The Player may not play their chest (0 and 
 ║0 ╠══╬══╬══╬══╬══╬══╣ 7║
 ║  ║ 1║ 2║ 3║ 4║ 5║ 6║  ║
 ╚══╩══╩══╩══╩══╩══╩══╩══╝
+
+On empty takes:
+1: 13
+2: 12
+3: 11
+4: 10
+5: 9
+6: 8
+
+8: 6
+9: 5
+10: 4
+11: 3
+12: 2
+13: 1

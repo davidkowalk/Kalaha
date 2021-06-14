@@ -1,9 +1,11 @@
+from Board import Board
+
 def print_layout():
-    print("╔═╦═╦═╦═╦═╦═╦═╦═╗")
-    print("║ ║D║C║B║A║9║8║ ║")
-    print("║0╠═╬═╬═╬═╬═╬═╣7║")
-    print("║ ║1║2║3║4║5║6║ ║")
-    print("╚═╩═╩═╩═╩═╩═╩═╩═╝")
+    print("╔══╦══╦══╦══╦══╦══╦══╦══╗")
+    print("║  ║ 6║ 5║ 4║ 3║ 2║ 1║  ║")
+    print("║0 ╠══╬══╬══╬══╬══╬══╣ 0║")
+    print("║  ║ 1║ 2║ 3║ 4║ 5║ 6║  ║")
+    print("╚══╩══╩══╩══╩══╩══╩══╩══╝")
 
 def lpad(str, length=2):
     num = len(str)
