@@ -3,7 +3,7 @@ from Board import Board
 def print_layout():
     print("╔══╦══╦══╦══╦══╦══╦══╦══╗")
     print("║  ║ 6║ 5║ 4║ 3║ 2║ 1║  ║ <- Player 2")
-    print("║0 ╠══╬══╬══╬══╬══╬══╣ 0║")
+    print("║  ╠══╬══╬══╬══╬══╬══╣  ║")
     print("║  ║ 1║ 2║ 3║ 4║ 5║ 6║  ║ <- Player 1")
     print("╚══╩══╩══╩══╩══╩══╩══╩══╝")
 
@@ -38,14 +38,21 @@ def render(field):
 
 def get_index(player):
     while True:
-        i = int(input(f"Player {player+1}:"))
+        i = input(f"Player {player+1}:")
 
-        if 0 < i < 7:
-            return i+player*7
+        if i == "exit":
+            exit()
+        elif 0 < int(i) < 7:
+            return int(i)+player*7
         else:
-            print("Please select number from 1 to 6")
+            #print("Please select number from 1 to 6 or exit via \"exit\"\r\033[A\033[A")
+            print("Please select number from 1 to 6 or exit via \"exit\"")
 
 def main():
+    import colorama
+
+    colorama.init()
+
     print("Layout")
     print_layout()
     print("\nGAME")
@@ -57,17 +64,22 @@ def main():
         code = b.play(i)
 
         if code == 1:
-            print("You can only play your own side.")
+            print("You can only play your own side.", end="")
         elif code == 2:
-            print("You cannot play your chest.")
+            print("You cannot play your Mancala.", end="")
         elif code == 3:
-            print("The position you want to play must have a stone count higher than 0!")
+            print("The position you want to play must have a stone count higher than 0!", end="")
         elif code == 4:
-            print("You ended in your chest. You may play again.")
+            print("You ended in your Mancala. You may play again.", end="")
         elif code == 5:
-            print(f"Player {(1-b.current_player)+1} took.")
+            print(f"Player {(1-b.current_player)+1} took.", end="")
         elif code == -1:
-            print(f"ERROR: Index {i} not on board....")
+            print(f"ERROR: Index {i} not on board....", end="")
+        else:
+            print(" "*90, end="")
+
+        print(" "*30)
+        #print("\r\033[A\033[A\033[A\033[A\033[A\033[A\033[A\033[A\033[A\033[A") #Return to start
 
 
 
