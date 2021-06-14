@@ -2,9 +2,9 @@ from Board import Board
 
 def print_layout():
     print("╔══╦══╦══╦══╦══╦══╦══╦══╗")
-    print("║  ║ 6║ 5║ 4║ 3║ 2║ 1║  ║")
+    print("║  ║ 6║ 5║ 4║ 3║ 2║ 1║  ║ <- Player 2")
     print("║0 ╠══╬══╬══╬══╬══╬══╣ 0║")
-    print("║  ║ 1║ 2║ 3║ 4║ 5║ 6║  ║")
+    print("║  ║ 1║ 2║ 3║ 4║ 5║ 6║  ║ <- Player 1")
     print("╚══╩══╩══╩══╩══╩══╩══╩══╝")
 
 def lpad(str, length=2):
@@ -36,12 +36,40 @@ def render(field):
         )
     )
 
+def get_index(player):
+    while True:
+        i = int(input(f"Player {player+1}:"))
+
+        if 0 < i < 7:
+            return i+player*7
+        else:
+            print("Please select number from 1 to 6")
+
 def main():
     print("Layout")
     print_layout()
     print("\nGAME")
 
-    render([6]*14)
+    b = Board()
+    while not b.ended:
+        render(b.state)
+        i = get_index(b.current_player)
+        code = b.play(i)
+
+        if code == 1:
+            print("You can only play your own side.")
+        elif code == 2:
+            print("You cannot play your chest.")
+        elif code == 3:
+            print("The position you want to play must have a stone count higher than 0!")
+        elif code == 4:
+            print("You ended in your chest. You may play again.")
+        elif code == 5:
+            print(f"Player {(1-b.current_player)+1} took.")
+        elif code == -1:
+            print(f"ERROR: Index {i} not on board....")
+
+
 
 if __name__ == '__main__':
     main()

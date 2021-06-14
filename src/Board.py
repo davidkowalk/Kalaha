@@ -32,6 +32,7 @@ class Board():
 
         self.state = state
         self.current_player = current_player
+        self.ended = False
 
     def play(self, index):
 
@@ -70,11 +71,9 @@ class Board():
             index = (index+1)%14
 
             if index == chest[1-self.current_player]:
-                print("Skipping", index)
+                #print("Skipping", index)
                 continue
-            else:
-                print(index)
-
+            
             self.state[index]+=1
             amount -= 1
 
