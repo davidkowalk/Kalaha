@@ -4,7 +4,7 @@
 ║ ║1║2║3║4║5║6║ ║
 ╚═╩═╩═╩═╩═╩═╩═╩═╝
 
-May either type "A" or Decimal "10"
+May either type "A" or Decimal "10". The Player may not play their chest (0 and 7)
 
 ╔══╦══╦══╦══╦══╦══╦══╦══╗
 ║  ║ D║ C║ B║ A║ 9║ 8║  ║
