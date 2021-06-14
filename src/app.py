@@ -36,22 +36,26 @@ def render(field):
         )
     )
 
-def get_index(player):
+def get_index(board):
+
+    if board.game_ended():
+        return 0
+
     while True:
-        i = input(f"Player {player+1}:")
+        i = input(f"Player {board.current_player+1}:")
 
         if i == "exit":
             exit()
         elif 0 < int(i) < 7:
-            return int(i)+player*7
+            return int(i)+board.current_player*7
         else:
             #print("Please select number from 1 to 6 or exit via \"exit\"\r\033[A\033[A")
             print("Please select number from 1 to 6 or exit via \"exit\"")
 
 def main():
-    import colorama
+    #import colorama
 
-    colorama.init()
+    #colorama.init()
 
     print("Layout")
     print_layout()
@@ -60,7 +64,7 @@ def main():
     b = Board()
     while not b.ended:
         render(b.state)
-        i = get_index(b.current_player)
+        i = get_index(b)
         code = b.play(i)
 
         if code == 1:
@@ -75,6 +79,13 @@ def main():
             print(f"Player {(1-b.current_player)+1} took.", end="")
         elif code == -1:
             print(f"ERROR: Index {i} not on board....", end="")
+        elif code == 6:
+            print("Game Ended\n\n")
+            winner = b.finalize()
+
+            print(f"Player {winner+1} won!")
+            render(b.state)
+            break
         else:
             print(" "*90, end="")
 

@@ -29,10 +29,35 @@ class Board():
 
         if state == None:
             state = [0]+[6]*6+[0]+[6]*6
+            #state = [0]*6+[1]+[1]*6+[0]
 
         self.state = state
         self.current_player = current_player
         self.ended = False
+
+    def finalize(self):
+        """
+        Adds up all the stones on each side and returns the winning player
+        """
+
+        for i in range(8,14):
+             self.state[0] += self.state[i]
+             self.state[i] = 0
+
+        for i in range(1, 7):
+            self.state[7] += self.state[i]
+            self.state[i] = 0
+
+        return int(self.state[0]>self.state[1])
+
+    def game_ended(self):
+        # Check if player can play
+        for i in playable_range[self.current_player]:
+            #print("Checking", i,":", self.state[i])
+            if self.state[i] != 0:
+                return False
+        else:
+            return True
 
     def play(self, index):
 
@@ -45,6 +70,7 @@ class Board():
         3: Player tried to play empty position
         4: Player may play again
         5: Player took
+        6: Game Ended
         -1: Index not on board
         """
 
@@ -53,6 +79,10 @@ class Board():
         #elif self.current_player == 1 and 8 <= index <= 13:
         #    pass
 
+        if self.game_ended():
+            return 6
+
+        #Illegal Moves
         if index in playable_range[1-self.current_player]:
             return 1
         elif index == chest[self.current_player]:
@@ -73,7 +103,7 @@ class Board():
             if index == chest[1-self.current_player]:
                 #print("Skipping", index)
                 continue
-            
+
             self.state[index]+=1
             amount -= 1
 
