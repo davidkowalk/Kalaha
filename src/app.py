@@ -1,6 +1,5 @@
-from Board import Board
+from Board import Board, code_to_list
 from sys import argv
-import binascii
 
 def print_layout():
     print("╔══╦══╦══╦══╦══╦══╦══╦══╗")
@@ -48,7 +47,7 @@ def get_index(board):
 
         if i == "exit":
             # Print board representation
-            print(f"Continue with code \"{binascii.hexlify(bytearray(board.state)).decode()}\"")
+            print(f"Continue with code \"{board.get_code()}\"")
             print("> python3 ./app.py <code>")
             exit()
         elif 0 < int(i) < 7:
@@ -88,11 +87,10 @@ def game_loop(b):
 
 def main():
     #import colorama
-
     #colorama.init()
 
     if len(argv)>1:
-        state = list(binascii.unhexlify(argv[1].encode("utf-8")))
+        state = code_to_list(argv[1])
         b = Board(state)
     else:
         b = Board()

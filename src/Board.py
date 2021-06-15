@@ -1,3 +1,5 @@
+from binascii import hexlify, unhexlify
+
 chest = {
     0: 7,
     1: 0
@@ -23,6 +25,9 @@ playable_range = {
     1: [8,9,10,11,12,13]
 }
 
+def code_to_list(code):
+    return list(unhexlify(code.encode("utf-8")))
+
 class Board():
 
     def __init__(self, state=None, current_player = 0):
@@ -35,9 +40,12 @@ class Board():
         self.current_player = current_player
         self.ended = False
 
+    def get_code(self):
+        return hexlify(bytearray(self.state)).decode()
+
     def finalize(self):
         """
-        Adds up all the stones on each side and returns the winning player
+        Adds up all the stones on each side and returns the winning player.
         """
 
         for i in range(8,14):
@@ -48,7 +56,7 @@ class Board():
             self.state[7] += self.state[i]
             self.state[i] = 0
 
-        return int(self.state[0]>self.state[1])
+        return int(self.state[0]>self.state[7])
 
     def game_ended(self):
         # Check if player can play
