@@ -39,6 +39,8 @@ class Board():
         self.state = state
         self.current_player = current_player
         self.ended = False
+        self.played = False
+        self.message = " "*20
 
     def get_code(self):
         return hexlify(bytearray(self.state)).decode()

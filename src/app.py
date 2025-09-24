@@ -1,5 +1,5 @@
 from Board import Board, code_to_list
-from sys import argv
+from sys import argv, stdout
 
 def print_layout():
     print("╔══╦══╦══╦══╦══╦══╦══╦══╗")
@@ -12,13 +12,31 @@ def lpad(str, length=2):
     num = len(str)
     return " "*(length-num)+str
 
-def render(field):
+
+def render(board):
+
+    if board.played:
+        pass
+        stdout.write("\033[10A\033[2K\r")
+        stdout.flush()
+    else:
+        board.played = True
+
+
+    # Print Message
+    print(board.message + "\n")
+    board.message = " "*68
+
+
+    field = board.state
+
     print("""
     ╔══╦══╦══╦══╦══╦══╦══╦══╗
     ║  ║{N}║{M}║{L}║{K}║{J}║{I}║  ║
     ║{A}╠══╬══╬══╬══╬══╬══╣{H}║
     ║  ║{B}║{C}║{D}║{E}║{F}║{G}║  ║
     ╚══╩══╩══╩══╩══╩══╩══╩══╝
+
     """.format(
             A = lpad(str(field[0])),
             B = lpad(str(field[1])),
@@ -45,44 +63,50 @@ def get_index(board):
     while True:
         i = input(f"Player {board.current_player+1}:")
 
+        #Flush input:
+        stdout.write("\033[1A\033[2K\r")
+        stdout.flush()
+
         if i == "exit":
             # Print board representation
             print(f"Continue with code \"{board.get_code()}\"")
             print("> python3 ./app.py <code>")
             exit()
-        elif 0 < int(i) < 7:
+        elif i.isnumeric() and 0 < int(i) < 7:
             return int(i)+board.current_player*7
         else:
             #print("Please select number from 1 to 6 or exit via \"exit\"\r\033[A\033[A")
-            print("Please select number from 1 to 6 or exit via \"exit\"")
+            board.message = "Please select number from 1 to 6 or exit via \"exit\""
+            render(board)
 
 def game_loop(b):
     while not b.ended:
-        render(b.state)
+        render(b)
         i = get_index(b)
         code = b.play(i)
 
         if code == 1:
-            print("You can only play your own side.", end="")
+            b.message = "You can only play your own side."
         elif code == 2:
-            print("You cannot play your Mancala.", end="")
+            b.message = "You cannot play your Mancala."
         elif code == 3:
-            print("The position you want to play must have a stone count higher than 0!", end="")
+            b.message = "The position you want to play must have a stone count higher than 0!"
         elif code == 4:
-            print("You ended in your Mancala. You may play again.", end="")
+            b.message = "You ended in your Mancala. You may play again."
         elif code == 5:
-            print(f"Player {(1-b.current_player)+1} took.", end="")
+            b.message = f"Player {(1-b.current_player)+1} took."
         elif code == -1:
-            print(f"ERROR: Index {i} not on board....", end="")
+            b.message = f"ERROR: Index {i} not on board...."
         elif code == 6:
             print("Game Ended\n\n")
             winner = b.finalize()
             print(f"Player {winner+1} won!")
-            render(b.state)
+            render(b)
             break
         else:
-            print(" "*90, end="")
-            print(" "*30)
+            pass
+            # print(" "*90, end="")
+            # print(" "*30)
         #print("\r\033[A\033[A\033[A\033[A\033[A\033[A\033[A\033[A\033[A\033[A") #Return to start
 
 def main():
